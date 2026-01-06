@@ -1,0 +1,76 @@
+[gd_scene load_steps=12 format=3 uid="uid://crtmdh1yr6guv"]
+
+[ext_resource type="Script" uid="uid://gqst5006qw30" path="res://scripts/player_AI/player_ai.gd" id="1_j0ypq"]
+[ext_resource type="Script" uid="uid://bxeq3cd3tkrq4" path="res://scripts/state_machine/finite_state_machine.gd" id="2_hkf1j"]
+[ext_resource type="Script" uid="uid://di67iipte6x4k" path="res://scripts/player_AI/states/serve_state.gd" id="3_rpdgl"]
+[ext_resource type="Script" uid="uid://bmfoix17ork5o" path="res://scripts/player_AI/states/return_state.gd" id="4_imps7"]
+[ext_resource type="Script" uid="uid://b8g0uum0iputg" path="res://scripts/player_AI/states/rally_state.gd" id="5_66rkp"]
+[ext_resource type="Script" uid="uid://ctf6k3conopu5" path="res://scripts/player_AI/states/posititoning_stage.gd" id="6_hv7mn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v005w"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hkf1j"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hkf1j"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rpdgl"]
+material = SubResource("StandardMaterial3D_hkf1j")
+radius = 0.01
+height = 0.02
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_imps7"]
+radius = 0.4
+
+[node name="PlayerAI" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 246
+script = ExtResource("1_j0ypq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_v005w")
+
+[node name="Body" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("BoxMesh_hkf1j")
+
+[node name="Eye_1" type="MeshInstance3D" parent="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0481752, 0.0421431, 0.107399)
+mesh = SubResource("CapsuleMesh_rpdgl")
+
+[node name="Eye_2" type="MeshInstance3D" parent="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0443694, 0.0421431, 0.107399)
+mesh = SubResource("CapsuleMesh_rpdgl")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, 1)
+
+[node name="FiniteStateMachine" type="Node" parent="."]
+script = ExtResource("2_hkf1j")
+
+[node name="ServeState" type="Node3D" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
+script = ExtResource("3_rpdgl")
+actor = NodePath("../..")
+jump_height = 4.5
+
+[node name="ReturnState" type="Node3D" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
+script = ExtResource("4_imps7")
+actor = NodePath("../..")
+
+[node name="RallyState" type="Node3D" parent="FiniteStateMachine"]
+script = ExtResource("5_66rkp")
+
+[node name="PosititoningStage" type="Node3D" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
+script = ExtResource("6_hv7mn")
+actor = NodePath("../..")
+
+[node name="StrikeZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.124439, 0.106849)
+collision_layer = 16
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StrikeZone"]
+shape = SubResource("SphereShape3D_imps7")
+
+[connection signal="body_entered" from="StrikeZone" to="FiniteStateMachine/ReturnState" method="_on_strike_zone_body_entered"]

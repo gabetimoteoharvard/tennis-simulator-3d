@@ -1,0 +1,339 @@
+[gd_scene load_steps=41 format=3 uid="uid://dm0nhwmpmuu6n"]
+
+[ext_resource type="Script" uid="uid://c1a4bkmajkn8c" path="res://scripts/game_configs/CameraRig.gd" id="1_0wfyh"]
+[ext_resource type="Script" uid="uid://jiqc2nh22pff" path="res://scripts/game_configs/CONTROLLER.gd" id="1_jyhfs"]
+[ext_resource type="Script" uid="uid://o6lm27in0cu3" path="res://scripts/bounce_zone.gd" id="1_sugp2"]
+[ext_resource type="PackedScene" uid="uid://crtmdh1yr6guv" path="res://scenes/player_ai.tscn" id="2_sugp2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yyxwi"]
+albedo_color = Color(0.882353, 1, 0.752941, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gcb4b"]
+material = SubResource("StandardMaterial3D_yyxwi")
+size = Vector2(50, 50)
+center_offset = Vector3(0, -0.01, 0)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nk661"]
+sky_top_color = Color(0.713726, 0.698039, 0.729412, 1)
+sky_horizon_color = Color(0.713726, 0.698039, 0.729412, 1)
+ground_bottom_color = Color(0.803922, 0.698039, 0.729412, 1)
+ground_horizon_color = Color(0.713726, 0.698039, 0.729412, 1)
+
+[sub_resource type="Sky" id="Sky_teft3"]
+sky_material = SubResource("ProceduralSkyMaterial_nk661")
+
+[sub_resource type="Environment" id="Environment_iapbc"]
+background_mode = 2
+sky = SubResource("Sky_teft3")
+ambient_light_source = 3
+ambient_light_color = Color(0.882353, 0.74902, 0, 1)
+ambient_light_energy = 1.71
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_puy4h"]
+albedo_color = Color(1, 0.509804, 0.470588, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lp0ne"]
+material = SubResource("StandardMaterial3D_puy4h")
+size = Vector2(10, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sugp2"]
+size = Vector3(0.1, 3, 6.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jyhfs"]
+size = Vector3(0.1, 3, 6.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tbgi4"]
+size = Vector3(10.2, 3, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tefeu"]
+size = Vector3(10.2, 3, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0wfyh"]
+size = Vector3(10.015, 1, 5.994)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_apcn1"]
+friction = 0.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q50vd"]
+size = Vector3(10.015, 1, 5.994)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_34i5y"]
+albedo_color = Color(0.12549, 0.0745098, 0.835294, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_r0jsp"]
+material = SubResource("StandardMaterial3D_34i5y")
+size = Vector2(6.5, 3)
+
+[sub_resource type="Skin" id="Skin_m88h5"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4oho1"]
+size = Vector3(6.5, 0.001, 0.014)
+
+[sub_resource type="BoxMesh" id="BoxMesh_84c4b"]
+size = Vector3(6.5, 0.001, 0.014)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2sale"]
+size = Vector3(0.014, 0.001, 2.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1qet2"]
+size = Vector3(0.014, 0.001, 2.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vayv8"]
+size = Vector3(0.014, 0.001, 2.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ax41k"]
+size = Vector3(3.5, 0.001, 0.014)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0xm2m"]
+size = Vector2(0.1, 2.25)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_h2yge"]
+size = Vector2(1.751, 2.25)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jyhfs"]
+size = Vector2(3.25, 2.25)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4bkvq"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2xvrk"]
+material = SubResource("StandardMaterial3D_4bkvq")
+size = Vector3(0.014, 0.3, 0.014)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6hcsa"]
+size = Vector3(0.014, 0.3, 0.014)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_383y2"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3njdi"]
+material = SubResource("StandardMaterial3D_383y2")
+size = Vector3(0.014, 0.3, 0.014)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0vo2t"]
+size = Vector3(0.014, 0.3, 0.014)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7mycd"]
+material = SubResource("StandardMaterial3D_h2yge")
+size = Vector2(0.3, 2.97)
+subdivide_width = 25
+subdivide_depth = 10
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(1, 1, 1, 0.435294)
+
+[sub_resource type="Environment" id="Environment_sugp2"]
+tonemap_exposure = 2.0
+
+[node name="Main" type="Node3D"]
+transform = Transform3D(1, 0, 0.00029704, 0, 1, 0, -0.00029704, 0, 1, 0, 0, 0)
+
+[node name="CONTROLLER" type="Node3D" parent="." node_paths=PackedStringArray("player_one", "player_two")]
+script = ExtResource("1_jyhfs")
+player_one = NodePath("../PlayerAI_1")
+player_two = NodePath("../PlayerAI_2")
+
+[node name="Scenery" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Scenery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0417099, 0)
+mesh = SubResource("PlaneMesh_gcb4b")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Scenery"]
+environment = SubResource("Environment_iapbc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Scenery"]
+transform = Transform3D(-0.139925, 0.337104, -0.931011, -0.355284, 0.860555, 0.36499, 0.924226, 0.381845, -0.00064528, -4.98983, 2.24855, -0.336832)
+light_color = Color(1, 1, 0.788235, 1)
+light_energy = 0.85
+shadow_enabled = true
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Scenery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0099287, 0)
+mesh = SubResource("PlaneMesh_lp0ne")
+
+[node name="Fences" type="Node3D" parent="."]
+
+[node name="Fence_1" type="StaticBody3D" parent="Fences"]
+transform = Transform3D(1, 0, 5.82077e-11, 0, 1, 0, -5.82077e-11, 0, 1, 5.037, 0, 0)
+collision_layer = 16
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Fences/Fence_1"]
+transform = Transform3D(1, 0, -2.91038e-11, 0, 1, 0, 2.91038e-11, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_sugp2")
+
+[node name="Fence_2" type="StaticBody3D" parent="Fences"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.037, 0, 0)
+collision_layer = 16
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Fences/Fence_2"]
+transform = Transform3D(1, 0, 2.91038e-11, 0, 1, 0, -2.91038e-11, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_jyhfs")
+
+[node name="Fence_3" type="StaticBody3D" parent="Fences"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.011)
+collision_layer = 16
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Fences/Fence_3"]
+shape = SubResource("BoxShape3D_tbgi4")
+
+[node name="Fence_4" type="StaticBody3D" parent="Fences"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.011)
+collision_layer = 16
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Fences/Fence_4"]
+shape = SubResource("BoxShape3D_tefeu")
+
+[node name="BounceZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.41648, 0)
+collision_layer = 16
+collision_mask = 8
+script = ExtResource("1_sugp2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BounceZone"]
+shape = SubResource("BoxShape3D_0wfyh")
+
+[node name="Court" type="StaticBody3D" parent="."]
+collision_layer = 2
+physics_material_override = SubResource("PhysicsMaterial_apcn1")
+
+[node name="GroundCollision" type="CollisionShape3D" parent="Court"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.497775, 0)
+shape = SubResource("BoxShape3D_q50vd")
+debug_color = Color(0.0991514, 0.592711, 0.72146, 0.42)
+
+[node name="Base" type="MeshInstance3D" parent="Court"]
+mesh = SubResource("PlaneMesh_r0jsp")
+skin = SubResource("Skin_m88h5")
+
+[node name="Lines" type="Node3D" parent="Court"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Court/Lines"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.07336e-08, 0, -1.125)
+mesh = SubResource("BoxMesh_4oho1")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Court/Lines"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.125)
+mesh = SubResource("BoxMesh_84c4b")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Court/Lines"]
+mesh = SubResource("BoxMesh_2sale")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Court/Lines"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.751, 0, 0)
+mesh = SubResource("BoxMesh_1qet2")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Court/Lines"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.751, 0, 0)
+mesh = SubResource("BoxMesh_vayv8")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Court/Lines"]
+mesh = SubResource("BoxMesh_ax41k")
+
+[node name="CourtAreas" type="Node3D" parent="Court"]
+visible = false
+
+[node name="ServeArea_1" type="MeshInstance3D" parent="Court/CourtAreas"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -3.5, 0.007, 0)
+mesh = SubResource("PlaneMesh_0xm2m")
+
+[node name="ServeArea_2" type="MeshInstance3D" parent="Court/CourtAreas"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 3.5, 0.007, 0)
+mesh = SubResource("PlaneMesh_0xm2m")
+
+[node name="ReturnArea_1" type="MeshInstance3D" parent="Court/CourtAreas"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -3.99994, 0.007, -0.000148503)
+mesh = SubResource("PlaneMesh_0xm2m")
+
+[node name="ReturnArea_2" type="MeshInstance3D" parent="Court/CourtAreas"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 4, 0.007, 0)
+mesh = SubResource("PlaneMesh_0xm2m")
+
+[node name="ServiceBoxes_1" type="MeshInstance3D" parent="Court/CourtAreas"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0.893133, 0.00823593, 0.000265296)
+mesh = SubResource("PlaneMesh_h2yge")
+
+[node name="ServiceBoxes_2" type="MeshInstance3D" parent="Court/CourtAreas"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, -0.893, 0.008, 0)
+mesh = SubResource("PlaneMesh_h2yge")
+
+[node name="InsideArea_1" type="MeshInstance3D" parent="Court/CourtAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.625, 0.007, 0)
+mesh = SubResource("PlaneMesh_jyhfs")
+
+[node name="InsideArea_2" type="MeshInstance3D" parent="Court/CourtAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.625, 0.007, 0)
+mesh = SubResource("PlaneMesh_jyhfs")
+
+[node name="NetRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+
+[node name="LeftPost" type="StaticBody3D" parent="NetRoot"]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="NetRoot/LeftPost"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, 0.15, -1.5)
+mesh = SubResource("BoxMesh_2xvrk")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NetRoot/LeftPost"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8871e-08, 0.15, -1.5)
+shape = SubResource("BoxShape3D_6hcsa")
+
+[node name="RightPost" type="StaticBody3D" parent="NetRoot"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NetRoot/RightPost"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.07336e-08, 0.15, 1.5)
+mesh = SubResource("BoxMesh_3njdi")
+skeleton = NodePath("../../../Court")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="NetRoot/RightPost"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.07336e-08, 0.15, 1.5)
+shape = SubResource("BoxShape3D_0vo2t")
+
+[node name="Net" type="Node3D" parent="NetRoot"]
+
+[node name="NetMesh" type="MeshInstance3D" parent="NetRoot/Net"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.14, 0)
+mesh = SubResource("PlaneMesh_7mycd")
+surface_material_override/0 = SubResource("StandardMaterial3D_0xm2m")
+
+[node name="CameraRig" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.03383e-08, 2.19674, 4)
+script = ExtResource("1_0wfyh")
+mouse_sensitivity = 0.001
+
+[node name="PitchPivot" type="Node3D" parent="CameraRig"]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/PitchPivot"]
+environment = SubResource("Environment_sugp2")
+fov = 70.8895
+
+[node name="PlayerAI_1" parent="." node_paths=PackedStringArray("main", "opponent", "service_area", "service_target_area", "return_area", "target_ball_area") instance=ExtResource("2_sugp2")]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, -0.807806, 0.341608, 0.0118942)
+main = NodePath("..")
+court_side = 1
+opponent = NodePath("../PlayerAI_2")
+service_area = NodePath("../Court/CourtAreas/ServeArea_1")
+service_target_area = NodePath("../Court/CourtAreas/ServiceBoxes_1")
+return_area = NodePath("../Court/CourtAreas/ReturnArea_1")
+target_ball_area = NodePath("../Court/CourtAreas/InsideArea_2")
+
+[node name="PlayerAI_2" parent="." node_paths=PackedStringArray("main", "opponent", "service_area", "service_target_area", "return_area", "target_ball_area") instance=ExtResource("2_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.126737, 0.874249, 2.57237)
+main = NodePath("..")
+opponent = NodePath("../PlayerAI_1")
+service_area = NodePath("../Court/CourtAreas/ServeArea_2")
+service_target_area = NodePath("../Court/CourtAreas/ServiceBoxes_2")
+return_area = NodePath("../Court/CourtAreas/ReturnArea_2")
+target_ball_area = NodePath("../Court/CourtAreas/InsideArea_1")
+
+[connection signal="body_entered" from="BounceZone" to="BounceZone" method="_on_body_entered"]

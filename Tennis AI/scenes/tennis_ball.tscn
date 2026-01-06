@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://df2rbpuy8uxl1"]
+
+[ext_resource type="Script" uid="uid://dl2bd7t7blx2w" path="res://scripts/tennis_ball.gd" id="1_yv6bk"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_f6scj"]
+friction = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bnp1d"]
+radius = 0.03
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wrl5w"]
+albedo_color = Color(1.68458e-06, 0.734467, 0.366319, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_f6hqo"]
+material = SubResource("StandardMaterial3D_wrl5w")
+radius = 0.03
+height = 0.06
+
+[node name="TennisBall" type="RigidBody3D"]
+collision_layer = 8
+collision_mask = 16
+physics_material_override = SubResource("PhysicsMaterial_f6scj")
+continuous_cd = true
+script = ExtResource("1_yv6bk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_bnp1d")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("SphereMesh_f6hqo")
+skeleton = NodePath("../..")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
