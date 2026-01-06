@@ -72,7 +72,6 @@ func move_to_ball(delta):
 	if not predicted:
 		var bounce_parameters = predict_bounce(ball, delta)
 		var time = bounce_parameters[2]
-		print(time)
 		
 		ps = Vector2(bounce_parameters[0], bounce_parameters[1])
 		
@@ -105,8 +104,7 @@ func hit_ball(delta):
 	var alignment = Vector2(movement_dir.x, movement_dir.z).dot(Vector2(to_ball.x, to_ball.z)) if movement_dir.length() != 0 else 1
 	
 	var return_readiness = clamp((1.0 - actor.player_speed/actor.MAX_SPEED)*0.5 + alignment*0.5, 0.0, 1.0)
-	
-	print("align: " + str(alignment), " readiness: " + str(return_readiness))
+
 	
 	var target_box
 	var ball_target_coords

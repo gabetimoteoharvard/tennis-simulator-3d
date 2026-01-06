@@ -9,6 +9,7 @@ extends CharacterBody3D
 @onready var serve_state = $FiniteStateMachine/ServeState as ServeState
 @onready var return_state = $FiniteStateMachine/ReturnState as ReturnState
 @onready var positioning_state = $FiniteStateMachine/PosititoningStage as PositioningState
+@onready var rally_state = $FiniteStateMachine/RallyState as RallyState
 
 @onready var facing_dir = $RayCast3D
 
@@ -47,9 +48,13 @@ func _ready() -> void:
 	serve_state.set_physics_process(false)
 	return_state.set_physics_process(false)
 	positioning_state.set_physics_process(false)
+	rally_state.set_physics_process(false)
 	
 	return_state.to_position_state.connect(fsm.transition.bind(positioning_state))
 	serve_state.to_position_state.connect(fsm.transition.bind(positioning_state))
+	rally_state.to_position_state.connect(fsm.transition.bind(positioning_state))
+	
+	positioning_state.to_rally_state.connect(fsm.transition.bind(rally_state))
 	
 	
 	

@@ -58,8 +58,9 @@ jump_height = 4.5
 script = ExtResource("4_imps7")
 actor = NodePath("../..")
 
-[node name="RallyState" type="Node3D" parent="FiniteStateMachine"]
+[node name="RallyState" type="Node3D" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("5_66rkp")
+actor = NodePath("../..")
 
 [node name="PosititoningStage" type="Node3D" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("6_hv7mn")
@@ -74,3 +75,4 @@ collision_mask = 8
 shape = SubResource("SphereShape3D_imps7")
 
 [connection signal="body_entered" from="StrikeZone" to="FiniteStateMachine/ReturnState" method="_on_strike_zone_body_entered"]
+[connection signal="body_entered" from="StrikeZone" to="FiniteStateMachine/RallyState" method="_on_strike_zone_body_entered"]

@@ -20,6 +20,8 @@ var stages = {
 var dist
 
 var initial_vel = null
+
+signal to_rally_state
 func _enter_state():
 	ball = actor.main.get_node_or_null("Ball")
 	timing = 1.0
@@ -31,6 +33,9 @@ func _enter_state():
 	
 
 func _physics_process(delta: float) -> void:
+	if is_moving_towards_player():
+		to_rally_state.emit()
+		return
 	
 	actor.player_wobble = true
 	actor.wobble_speed = 3
@@ -45,12 +50,20 @@ func _physics_process(delta: float) -> void:
 		actor.wobble_speed = max(3, actor.player_speed * 2)
 	else:
 		actor.curr_target = null
+		to_rally_state.emit()
 		
 		
 	actor.rotate_self((ball.global_position - actor.global_position).normalized(), delta)
 	
 	timing = max(0, timing - delta)
 	return
+	
+func is_moving_towards_player():
+	""" Returns whether ball is currently going to player"""
+	if abs(actor.global_position.z - (ball.global_position.z)) > abs(actor.global_position.z - (ball.global_position.z +
+	sign(ball.linear_velocity.z))):
+		return true
+	return false
 	
 func determine_speed(dist: Vector2, time: float):
 	"""determines speed at which player moves toward target"""
