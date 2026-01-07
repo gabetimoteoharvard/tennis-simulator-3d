@@ -23,3 +23,9 @@ func bounce():
 	#lateral damping
 	linear_velocity.x *= 0.95
 	linear_velocity.z *= 0.95
+
+func is_moving_towards_player(actor):
+	""" Returns whether ball is currently going to player """
+	if ((actor.court_side == 0) and (linear_velocity.x > 0)) or ((actor.court_side == 1) and (linear_velocity.x < 0)):
+		return true
+	return false

@@ -24,7 +24,7 @@ var curr_target = null
 #speed parameters
 @export var rotate_speed = 2
 @export var player_speed = 0.8
-@export var MAX_SPEED = 3
+@export var MAX_SPEED = 2
 
 #serve parameters
 @export var service_area: MeshInstance3D
@@ -43,6 +43,8 @@ var court_areas = {"dropshot": null, "neutral": null, "defensive": null, "left":
 
 var current_playstyle = null
 
+var ball
+
 func _ready() -> void:
 	process_bounds(target_ball_area)
 	serve_state.set_physics_process(false)
@@ -55,8 +57,6 @@ func _ready() -> void:
 	rally_state.to_position_state.connect(fsm.transition.bind(positioning_state))
 	
 	positioning_state.to_rally_state.connect(fsm.transition.bind(rally_state))
-	
-	
 	
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -80,7 +80,16 @@ func movement(delta):
 	#vector we want our ray cast to be
 	var target_vector = (Vector3(curr_target.x, global_position.y, curr_target.y) - global_position).normalized() 
 							   
-	rotate_self(target_vector, delta) # rotate based on target
+	if !current_playstyle:
+		rotate_self(target_vector, delta) # rotate based on target
+	else:
+		
+		if not ball:	
+			ball = main.get_node_or_null("Ball")
+			
+		if ball:	
+			var target_ball_vector = (Vector3(ball.global_position.x, global_position.y, ball.global_position.z) - global_position).normalized() 
+			rotate_self(target_ball_vector, delta)
 	
 	#adjust our player velocity
 	var velocity_dir = (target_vector)*player_speed
@@ -167,8 +176,98 @@ func process_bounds(area: MeshInstance3D):
 	court_areas["right"] = [area.global_position.x + 0.8125*map[court_side], area.global_position.x + 1.625*map[court_side],
 							   area.global_position.z - 0.84375, area.global_position.z - 1.125]
 		
+func hit_ball(delta, ball: TennisBall, velocity_):
+	#idea: first look at player's speed, then at our velocity vector (both will determine how hard it is to return a shot). 
+	#ball speed will also factor in
+	
+	var to_ball = (ball.global_position - global_position).normalized()
+	var movement_dir = velocity_.normalized() if velocity_.length() != 0 else velocity_
+	
+	var alignment = Vector2(movement_dir.x, movement_dir.z).dot(Vector2(to_ball.x, to_ball.z)) if movement_dir.length() != 0 else 1
+	
+	var return_readiness = clamp((1.0 - player_speed/MAX_SPEED)*0.5 + alignment*0.5, 0.0, 1.0)
+
+	
+	var target_box
+	var ball_target_coords
+	var speed 
+	if return_readiness < 0.25:
+		#block, high ball, high chance for error
+		var error = randf_range(0,1)
+		target_box = court_areas["defensive"]
+		ball_target_coords = Vector2(randf_range(target_box[0], target_box[1]) + error, randf_range(target_box[2], target_box[3]) + error)
+		speed = randf_range(2,3)
+		
+		current_playstyle = "defensive"
+		
+	elif return_readiness < 0.4:
+		#defensive, somewhat neutral
+		target_box = court_areas["defensive"]
+		ball_target_coords = Vector2(randf_range(target_box[0], target_box[1]), randf_range(target_box[2], target_box[3]))
+		speed = randf_range(4,6)
+		
+		current_playstyle = "defensive"
 		
 	
+	elif return_readiness < 0.7:
+		#neutral, go for deep return
+		target_box = court_areas["neutral"]
+		ball_target_coords = Vector2(randf_range(target_box[0], target_box[1]), randf_range(target_box[2], target_box[3]))
+		speed = randf_range(6,8)
+		
+		current_playstyle = "neutral"
 	
-
+	else:
+		var choose =["right", "left"][ randi_range(0,1)]
+		target_box = court_areas[choose]
+		ball_target_coords = Vector2(randf_range(target_box[0], target_box[1]), randf_range(target_box[2], target_box[3]))
+		speed = randf_range(8,10)
+		
+		current_playstyle = "attack"
+		
+	
+	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+	var dist = ball_target_coords - Vector2(ball.global_position.x, ball.global_position.z)
+	var horizontal_dist = sqrt(dist.x * dist.x + dist.y * dist.y)
+	var vel = (dist).normalized() * speed
+	
+	var v_xz = sqrt(vel.x*vel.x  + vel.y*vel.y)
+	
+	var t = horizontal_dist/ v_xz
+	var v_y = max(2.8, (-ball.global_position.y + 0.5*gravity*t*t)/t)
+	
+	
+	ball.linear_velocity.x = vel.x
+	ball.linear_velocity.z = vel.y
+	ball.linear_velocity.y = v_y
+	
+	velocity.y = 1.5
+	
+func predict_bounce(ball: TennisBall, delta, max_time = 2.0, ball_threshold=[0.3, 0.4] ):
+	"""Returns position of where player should be for optimal ball hitting"""
+	
+	var g = ProjectSettings.get_setting("physics/3d/default_gravity")
+	var t = 0.0
+	var pos = ball.global_position
+	var vel = ball.linear_velocity
+	
+	var bounced = false
+	while t < max_time:
+		
+		vel.y += -g*delta
+		pos += vel * delta
+	
+		
+		if not bounced and pos.y <= 0:
+			vel.y = -(vel.y + sign(vel.y)*ball.court_bounce_factor) * ball.bounce_factor
+			pos.y = 0
+	
+			bounced = true
+			continue
+		
+		if bounced and ball_threshold[0] <= pos.y and pos.y <= ball_threshold[1]:
+			return [pos.x, pos.z, t]
+		t += delta
+			
+	return [pos.x, pos.z, t]
 	

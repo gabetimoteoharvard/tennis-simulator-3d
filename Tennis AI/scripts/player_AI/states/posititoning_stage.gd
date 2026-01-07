@@ -33,7 +33,7 @@ func _enter_state():
 	
 
 func _physics_process(delta: float) -> void:
-	if is_moving_towards_player():
+	if ball.is_moving_towards_player(actor):
 		to_rally_state.emit()
 		return
 	
@@ -58,12 +58,6 @@ func _physics_process(delta: float) -> void:
 	timing = max(0, timing - delta)
 	return
 	
-func is_moving_towards_player():
-	""" Returns whether ball is currently going to player"""
-	if abs(actor.global_position.z - (ball.global_position.z)) > abs(actor.global_position.z - (ball.global_position.z +
-	sign(ball.linear_velocity.z))):
-		return true
-	return false
 	
 func determine_speed(dist: Vector2, time: float):
 	"""determines speed at which player moves toward target"""
