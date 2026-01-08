@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://df2rbpuy8uxl1"]
+[gd_scene load_steps=7 format=3 uid="uid://df2rbpuy8uxl1"]
 
 [ext_resource type="Script" uid="uid://dl2bd7t7blx2w" path="res://scripts/tennis_ball.gd" id="1_yv6bk"]
 
@@ -16,6 +16,9 @@ material = SubResource("StandardMaterial3D_wrl5w")
 radius = 0.03
 height = 0.06
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_yv6bk"]
+radius = 0.03
+
 [node name="TennisBall" type="RigidBody3D"]
 collision_layer = 8
 collision_mask = 16
@@ -30,4 +33,10 @@ shape = SubResource("SphereShape3D_bnp1d")
 mesh = SubResource("SphereMesh_f6hqo")
 skeleton = NodePath("../..")
 
+[node name="EnvironmentCollision" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentCollision"]
+shape = SubResource("SphereShape3D_yv6bk")
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="EnvironmentCollision" to="." method="_on_environment_collision_body_entered"]

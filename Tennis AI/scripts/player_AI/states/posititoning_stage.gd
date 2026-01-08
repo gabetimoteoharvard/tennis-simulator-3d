@@ -33,6 +33,7 @@ func _enter_state():
 	
 
 func _physics_process(delta: float) -> void:
+	
 	if ball.is_moving_towards_player(actor):
 		to_rally_state.emit()
 		return

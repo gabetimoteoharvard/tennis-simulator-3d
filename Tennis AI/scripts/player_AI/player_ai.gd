@@ -1,6 +1,8 @@
 extends CharacterBody3D
 
 @export var main: Node3D
+@export var GAME_CONTROLLER: Node3D
+
 @export var court_side: int  #represents court side the player is on
 @export var opponent: CharacterBody3D
 
@@ -10,6 +12,7 @@ extends CharacterBody3D
 @onready var return_state = $FiniteStateMachine/ReturnState as ReturnState
 @onready var positioning_state = $FiniteStateMachine/PosititoningStage as PositioningState
 @onready var rally_state = $FiniteStateMachine/RallyState as RallyState
+@onready var pick_up_ball_state = $FiniteStateMachine/PickUpBallState as PickUpBallState
 
 @onready var facing_dir = $RayCast3D
 
@@ -45,12 +48,17 @@ var current_playstyle = null
 
 var ball
 
+var marker
+
 func _ready() -> void:
 	process_bounds(target_ball_area)
 	serve_state.set_physics_process(false)
 	return_state.set_physics_process(false)
 	positioning_state.set_physics_process(false)
 	rally_state.set_physics_process(false)
+	pick_up_ball_state.set_physics_process(false)
+	
+	pick_up_ball_state.to_serve.connect(fsm.transition.bind(serve_state))
 	
 	return_state.to_position_state.connect(fsm.transition.bind(positioning_state))
 	serve_state.to_position_state.connect(fsm.transition.bind(positioning_state))
@@ -58,6 +66,7 @@ func _ready() -> void:
 	
 	positioning_state.to_rally_state.connect(fsm.transition.bind(rally_state))
 	
+	marker = main.get_node('Marker')
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
@@ -185,13 +194,17 @@ func hit_ball(delta, ball: TennisBall, velocity_):
 	
 	var alignment = Vector2(movement_dir.x, movement_dir.z).dot(Vector2(to_ball.x, to_ball.z)) if movement_dir.length() != 0 else 1
 	
-	var return_readiness = clamp((1.0 - player_speed/MAX_SPEED)*0.5 + alignment*0.5, 0.0, 1.0)
-
+	var speed_weight = 0.35
+	var alignment_weight = 0.65
+	var return_readiness = clamp((1.0 - player_speed/MAX_SPEED)*speed_weight+ alignment*alignment_weight, 0.0, 1.0)
+	
+	print(return_readiness)
+	var playstyle_thresholds = {"defend_high": 0.2, "defend_low": 0.4, "neutral": 0.55}
 	
 	var target_box
 	var ball_target_coords
 	var speed 
-	if return_readiness < 0.25:
+	if return_readiness < playstyle_thresholds["defend_high"]:
 		#block, high ball, high chance for error
 		var error = randf_range(0,1)
 		target_box = court_areas["defensive"]
@@ -200,7 +213,7 @@ func hit_ball(delta, ball: TennisBall, velocity_):
 		
 		current_playstyle = "defensive"
 		
-	elif return_readiness < 0.4:
+	elif return_readiness < playstyle_thresholds["defend_low"]:
 		#defensive, somewhat neutral
 		target_box = court_areas["defensive"]
 		ball_target_coords = Vector2(randf_range(target_box[0], target_box[1]), randf_range(target_box[2], target_box[3]))
@@ -209,7 +222,7 @@ func hit_ball(delta, ball: TennisBall, velocity_):
 		current_playstyle = "defensive"
 		
 	
-	elif return_readiness < 0.7:
+	elif return_readiness < playstyle_thresholds["neutral"]:
 		#neutral, go for deep return
 		target_box = court_areas["neutral"]
 		ball_target_coords = Vector2(randf_range(target_box[0], target_box[1]), randf_range(target_box[2], target_box[3]))
@@ -225,7 +238,7 @@ func hit_ball(delta, ball: TennisBall, velocity_):
 		
 		current_playstyle = "attack"
 		
-	
+	marker.global_position = Vector3(ball_target_coords.x, marker.global_position.y, ball_target_coords.y )
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	var dist = ball_target_coords - Vector2(ball.global_position.x, ball.global_position.z)
 	var horizontal_dist = sqrt(dist.x * dist.x + dist.y * dist.y)
@@ -240,6 +253,8 @@ func hit_ball(delta, ball: TennisBall, velocity_):
 	ball.linear_velocity.x = vel.x
 	ball.linear_velocity.z = vel.y
 	ball.linear_velocity.y = v_y
+	
+	ball.bounces = 0
 	
 	velocity.y = 1.5
 	

@@ -59,6 +59,8 @@ func _enter_state():
 	#set target to move 
 	actor.curr_target = serve_position
 	actor.wobble_dir = "left"
+	actor.player_speed = 0.8
+	
 	set_physics_process(true)
 	
 	
@@ -93,6 +95,7 @@ func await_opponent(delta):
 		current_action += 1
 	
 func toss_phase(delta):
+	actor.GAME_CONTROLLER.rally_ready = true
 		
 	ball_instance = ball_scene.instantiate()
 	ball_instance.name = "Ball"
@@ -135,4 +138,6 @@ func process_serve(ball, target):
 	
 	
 func _exit_state():
+	hit_ball = false
+	jumped = false
 	set_physics_process(false)

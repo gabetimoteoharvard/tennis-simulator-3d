@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://crtmdh1yr6guv"]
+[gd_scene load_steps=13 format=3 uid="uid://crtmdh1yr6guv"]
 
 [ext_resource type="Script" uid="uid://gqst5006qw30" path="res://scripts/player_AI/player_ai.gd" id="1_j0ypq"]
 [ext_resource type="Script" uid="uid://bxeq3cd3tkrq4" path="res://scripts/state_machine/finite_state_machine.gd" id="2_hkf1j"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bmfoix17ork5o" path="res://scripts/player_AI/states/return_state.gd" id="4_imps7"]
 [ext_resource type="Script" uid="uid://b8g0uum0iputg" path="res://scripts/player_AI/states/rally_state.gd" id="5_66rkp"]
 [ext_resource type="Script" uid="uid://ctf6k3conopu5" path="res://scripts/player_AI/states/posititoning_stage.gd" id="6_hv7mn"]
+[ext_resource type="Script" uid="uid://djds2spj11wqv" path="res://scripts/player_AI/states/pick_up_ball_stage.gd" id="7_1ag2j"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v005w"]
 size = Vector3(0.2, 0.2, 0.2)
@@ -66,6 +67,10 @@ actor = NodePath("../..")
 script = ExtResource("6_hv7mn")
 actor = NodePath("../..")
 
+[node name="PickUpBallState" type="Node3D" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
+script = ExtResource("7_1ag2j")
+actor = NodePath("../..")
+
 [node name="StrikeZone" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.124439, 0.106849)
 collision_layer = 16
@@ -76,3 +81,4 @@ shape = SubResource("SphereShape3D_imps7")
 
 [connection signal="body_entered" from="StrikeZone" to="FiniteStateMachine/ReturnState" method="_on_strike_zone_body_entered"]
 [connection signal="body_entered" from="StrikeZone" to="FiniteStateMachine/RallyState" method="_on_strike_zone_body_entered"]
+[connection signal="body_entered" from="StrikeZone" to="FiniteStateMachine/PickUpBallState" method="_on_strike_zone_body_entered"]

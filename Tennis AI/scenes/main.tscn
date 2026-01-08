@@ -1,9 +1,10 @@
-[gd_scene load_steps=41 format=3 uid="uid://dm0nhwmpmuu6n"]
+[gd_scene load_steps=44 format=3 uid="uid://dm0nhwmpmuu6n"]
 
 [ext_resource type="Script" uid="uid://c1a4bkmajkn8c" path="res://scripts/game_configs/CameraRig.gd" id="1_0wfyh"]
 [ext_resource type="Script" uid="uid://jiqc2nh22pff" path="res://scripts/game_configs/CONTROLLER.gd" id="1_jyhfs"]
 [ext_resource type="Script" uid="uid://o6lm27in0cu3" path="res://scripts/bounce_zone.gd" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://crtmdh1yr6guv" path="res://scenes/player_ai.tscn" id="2_sugp2"]
+[ext_resource type="Script" uid="uid://bvgk8ifb4enh0" path="res://scripts/game_configs/fences.gd" id="2_tbgi4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yyxwi"]
 albedo_color = Color(0.882353, 1, 0.752941, 1)
@@ -129,13 +130,21 @@ albedo_color = Color(1, 1, 1, 0.435294)
 [sub_resource type="Environment" id="Environment_sugp2"]
 tonemap_exposure = 2.0
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jyhfs"]
+albedo_color = Color(0.992157, 0.0862745, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tbgi4"]
+material = SubResource("StandardMaterial3D_jyhfs")
+size = Vector2(0.1, 0.1)
+
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, 0, 0.00029704, 0, 1, 0, -0.00029704, 0, 1, 0, 0, 0)
 
-[node name="CONTROLLER" type="Node3D" parent="." node_paths=PackedStringArray("player_one", "player_two")]
+[node name="CONTROLLER" type="Node3D" parent="." node_paths=PackedStringArray("player_one", "player_two", "main")]
 script = ExtResource("1_jyhfs")
 player_one = NodePath("../PlayerAI_1")
 player_two = NodePath("../PlayerAI_2")
+main = NodePath("..")
 
 [node name="Scenery" type="Node3D" parent="."]
 
@@ -157,6 +166,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0099287, 0)
 mesh = SubResource("PlaneMesh_lp0ne")
 
 [node name="Fences" type="Node3D" parent="."]
+script = ExtResource("2_tbgi4")
 
 [node name="Fence_1" type="StaticBody3D" parent="Fences"]
 transform = Transform3D(1, 0, 5.82077e-11, 0, 1, 0, -5.82077e-11, 0, 1, 5.037, 0, 0)
@@ -317,9 +327,10 @@ mouse_sensitivity = 0.001
 environment = SubResource("Environment_sugp2")
 fov = 70.8895
 
-[node name="PlayerAI_1" parent="." node_paths=PackedStringArray("main", "opponent", "service_area", "service_target_area", "return_area", "target_ball_area") instance=ExtResource("2_sugp2")]
+[node name="PlayerAI_1" parent="." node_paths=PackedStringArray("main", "GAME_CONTROLLER", "opponent", "service_area", "service_target_area", "return_area", "target_ball_area") instance=ExtResource("2_sugp2")]
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, -0.807806, 0.341608, 0.0118942)
 main = NodePath("..")
+GAME_CONTROLLER = NodePath("../CONTROLLER")
 court_side = 1
 opponent = NodePath("../PlayerAI_2")
 service_area = NodePath("../Court/CourtAreas/ServeArea_1")
@@ -327,13 +338,18 @@ service_target_area = NodePath("../Court/CourtAreas/ServiceBoxes_1")
 return_area = NodePath("../Court/CourtAreas/ReturnArea_1")
 target_ball_area = NodePath("../Court/CourtAreas/InsideArea_2")
 
-[node name="PlayerAI_2" parent="." node_paths=PackedStringArray("main", "opponent", "service_area", "service_target_area", "return_area", "target_ball_area") instance=ExtResource("2_sugp2")]
+[node name="PlayerAI_2" parent="." node_paths=PackedStringArray("main", "GAME_CONTROLLER", "opponent", "service_area", "service_target_area", "return_area", "target_ball_area") instance=ExtResource("2_sugp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.126737, 0.874249, 2.57237)
 main = NodePath("..")
+GAME_CONTROLLER = NodePath("../CONTROLLER")
 opponent = NodePath("../PlayerAI_1")
 service_area = NodePath("../Court/CourtAreas/ServeArea_2")
 service_target_area = NodePath("../Court/CourtAreas/ServiceBoxes_2")
 return_area = NodePath("../Court/CourtAreas/ReturnArea_2")
 target_ball_area = NodePath("../Court/CourtAreas/InsideArea_1")
+
+[node name="Marker" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00893116, 0.0118592, -2.65291e-06)
+mesh = SubResource("PlaneMesh_tbgi4")
 
 [connection signal="body_entered" from="BounceZone" to="BounceZone" method="_on_body_entered"]

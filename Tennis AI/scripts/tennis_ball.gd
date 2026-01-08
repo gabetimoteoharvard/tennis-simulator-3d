@@ -5,6 +5,8 @@ extends RigidBody3D
 @export var court_bounce_factor: float = 0.5
 
 var floor = 0.025
+var bounces = 0
+var hit_wall = false
 
 func _physics_process(delta: float) -> void:
 	if abs(linear_velocity.y) < 1.7 and global_position.y < floor:
@@ -12,6 +14,7 @@ func _physics_process(delta: float) -> void:
 		linear_velocity.y = 0.0
 		
 func bounce():
+	bounces += 1
 
 	if linear_velocity.y < -2.5:
 		linear_velocity.y = -(linear_velocity.y + sign(linear_velocity.y)*court_bounce_factor) * bounce_factor
@@ -29,3 +32,9 @@ func is_moving_towards_player(actor):
 	if ((actor.court_side == 0) and (linear_velocity.x > 0)) or ((actor.court_side == 1) and (linear_velocity.x < 0)):
 		return true
 	return false
+
+
+func _on_environment_collision_body_entered(body: Node3D) -> void:
+	if body is Fence:
+		hit_wall = true
+		

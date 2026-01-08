@@ -35,6 +35,7 @@ func _enter_state():
 	return_position = Vector2(return_boundaries.x, (2*return_boundaries.z + offset.x + offset.y)/2)
 	
 	actor.curr_target = return_position
+	actor.player_speed = 0.8
 	
 	set_physics_process(true)
 	return
@@ -50,6 +51,9 @@ func anticipate(delta):
 	actor.rotate_self((actor.opponent.global_position - actor.global_position).normalized(), delta)
 	actor.player_wobble = true
 	
+	if !actor.GAME_CONTROLLER.rally_ready:
+		return
+		
 	ball = actor.main.get_node_or_null("Ball")
 	if ball != null:
 		current_action += 1
