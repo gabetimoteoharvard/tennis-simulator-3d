@@ -12,7 +12,7 @@ The project correctly implements these following mechanics:
 
 # How To Run
 
-Project runs on Godot 4.4. Install all files and import them inside as a project inside the Godot engine.
+Project runs on Godot 4.4. Install the 'Tennis AI' file and import it as a project inside the Godot engine.
 
 ## Roadmap
 
