@@ -8,6 +8,8 @@ The project correctly implements these following mechanics:
 * Players can hit ball differently based on their current playstyle (aggressive, defensive, neutral).
 * Players can pick up ball and restart the rally once a point is over.
 
+<img src="images/banner.png" height=600px width=600px>
+
 # How To Run
 
 Project runs on Godot 4.4. Install all files and import them inside as a project inside the Godot engine.
